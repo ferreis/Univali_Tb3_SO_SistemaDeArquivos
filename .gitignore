@@ -1,0 +1,27 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Arquivos de compilação e executáveis
+# Ignora os arquivos que o compilador cria
+*.o
+*.exe
+my_fs
+
+# Arquivos de saída do programa
+# Ignora a imagem do sistema de arquivos que seu programa gera
+*.img
+fs.img
+
+# Arquivos de editores de código e IDEs
+# Ignora pastas de configuração de editores como o VS Code
+.vscode/
+
+# Arquivos de sistema operacional
+# Ignora arquivos que o Mac OS ou Windows criam automaticamente
+.DS_Store
+Thumbs.db

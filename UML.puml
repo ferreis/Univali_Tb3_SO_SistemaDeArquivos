@@ -1,0 +1,52 @@
+@startuml
+' Define a aparência do diagrama
+skinparam classAttributeIconSize 0
+hide empty members
+
+' Definição das Classes
+class BTree {
+  + BTreeNode* root
+  + btree_create(): BTree*
+  + btree_insert(TreeNode* node): void
+  + btree_delete(const char* name): void
+  + btree_search(const char* name): TreeNode*
+  + btree_traverse(): void
+}
+
+class BTreeNode {
+  + int num_keys
+  + TreeNode* keys[]
+  + BTreeNode* children[]
+  + int leaf
+}
+
+class Directory {
+  + BTree* tree
+  + create_directory(const char* name): TreeNode*
+  + delete_directory(BTree* tree, const char* name): void
+  + get_root_directory(): Directory*
+  + change_directory(Directory** current, const char* path): void
+  + list_directory_contents(Directory* dir): void
+}
+
+class TreeNode {
+  + char* name
+  + NodeType type
+  + union data
+}
+
+class File {
+  + char* name
+  + char* content
+  + size_t size
+  + create_txt_file(const char* name, const char* content): TreeNode*
+  + delete_txt_file(BTree* tree, const char* name): void
+}
+
+' Definição dos Relacionamentos
+Directory "1" *-- "1" BTree : contém
+BTree "1" o-- "1" BTreeNode : (raiz)
+BTreeNode "1" *-- "0..*" TreeNode : (chaves)
+TreeNode "1" --> "1" File : (se for arquivo)
+TreeNode "1" --> "1" Directory : (se for diretório)
+@enduml

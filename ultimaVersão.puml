@@ -1,0 +1,99 @@
+@startuml
+' Sistema de arquivos B-Tree - Diagrama completo corrigido
+skinparam classAttributeIconSize 0
+
+' Enumeração para tipo de nó
+enum NodeType {
+  FILE_TYPE
+  DIRECTORY_TYPE
+}
+
+' Representa um nó genérico na árvore
+class TreeNode {
+  - name: char*
+  - type: NodeType
+  - creation_time: time_t
+  - modification_time: time_t
+  - last_access_time: time_t
+  - data: union { File* file; Directory* directory }
+}
+
+' Nós internos da árvore B
+class BTreeNode {
+  - leaf: bool
+  - num_keys: int
+  - keys: TreeNode* [2*BTREE_ORDER - 1]
+  - children: BTreeNode* [2*BTREE_ORDER]
+  + btree_create_node(leaf: bool): BTreeNode*
+  + btree_destroy_node(node: BTreeNode*): void
+  + btree_search_in_node(node: BTreeNode*, name: const char*): TreeNode*
+  + btree_insert_non_full(node: BTreeNode*, item: TreeNode*): void
+  + btree_split_child(parent: BTreeNode*, index: int, child: BTreeNode*): void
+  + btree_delete_from_node(node: BTreeNode*, name: const char*): void
+  + btree_find_key(node: BTreeNode*, name: const char*): int
+  + btree_merge(node: BTreeNode*, idx: int): void
+  + btree_fill(node: BTreeNode*, idx: int): void
+  + btree_borrow_from_prev(node: BTreeNode*, idx: int): void
+  + btree_borrow_from_next(node: BTreeNode*, idx: int): void
+  + btree_get_predecessor(node: BTreeNode*, idx: int): TreeNode*
+  + btree_get_successor(node: BTreeNode*, idx: int): TreeNode*
+}
+
+' Estrutura da árvore B
+class BTree {
+  - root: BTreeNode*
+  + btree_create(): BTree*
+  + btree_destroy(): void
+  + btree_search(tree: BTree*, name: const char*): TreeNode*
+  + btree_insert(tree: BTree*, item: TreeNode*): void
+  + btree_delete(tree: BTree*, name: const char*): void
+  + btree_traverse(node: BTreeNode*, long_format: bool): void
+}
+
+' Representa um arquivo
+class File {
+  - name: char*
+  - content: char*
+  - size: size_t
+  - creation_time: time_t
+  - modification_time: time_t
+  - last_access_time: time_t
+  + create_file(name: const char*, content: const char*): TreeNode*
+  + delete_file(node: TreeNode*): void
+}
+
+' Representa um diretório
+class Directory {
+  - name: char*
+  - parent: Directory*
+  - tree: BTree*
+  + create_directory(name: const char*, parent: Directory*): TreeNode*
+  + delete_directory_recursive(dir: Directory*): void
+  + free_tree_node(node: TreeNode*): void
+  + get_root_directory(): Directory*
+  + list_directory_contents(dir: Directory*, long_format: bool): void
+  + change_directory(current_dir: Directory**, path: const char*): void
+  + get_current_path(dir: Directory*): char*
+  + update_parent_modification_time(dir: Directory*): void
+  + show_metadata(dir: Directory*, name: const char*): void
+}
+
+' Interface CLI e utilitários
+class FileSystemCLI {
+  + print_prompt(current_dir: Directory*): void
+  + save_fs_image(root: Directory*, filename: const char*): void
+  + save_node_to_image_recursive(fp: FILE*, node: BTreeNode*, level: int): void
+  + load_fs_image(root: Directory*, filename: const char*): void
+  + load_node_from_image_recursive(fp: FILE*, parent: Directory*, level: int): void
+  + main(argc: int, argv: char**): int
+}
+
+' Relações
+TreeNode *-- File : contains >
+TreeNode *-- Directory : contains >
+Directory "1" *-- "1" BTree : manages >
+BTree "1" o-- "*" BTreeNode : consists of >
+FileSystemCLI ..> Directory : uses >
+FileSystemCLI ..> BTree : uses >
+
+@enduml
