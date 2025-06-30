@@ -1,37 +1,37 @@
 # Nome do compilador que vamos usar
-CC = gcc
+CC      = gcc
 
 # Flags do compilador:
-# -g -> adiciona informações de debug (para usar com gdb)
-# -Wall -> ativa todos os avisos (warning all), muito útil!
-# -Wextra -> ativa mais alguns avisos
-CFLAGS = -g -Wall -Wextra
+# -g      -> adiciona informação de debug (usada pelo gdb)
+# -Wall   -> ativa todos os avisos (warnings)
+# -Wextra -> ativa avisos adicionais
+CFLAGS  = -g -Wall -Wextra
 
-# Nome do programa executável que queremos criar
-TARGET = fs
+# Nome do executável resultante
+TARGET  = fs
 
-# Lista de todos os arquivos objeto (.o) que nosso programa precisa
-# O make vai criar um .o para cada .c
+# Lista de arquivos-fonte (.c)
 SOURCES = main_fs.c filesystem.c
+
+# Converte a lista de .c em lista de .o
 OBJECTS = $(SOURCES:.c=.o)
 
-# A regra principal: o que fazer quando você digita "make"
-# Ela depende de todos os arquivos objeto.
+# Regra padrão: quando você digita `make`, roda a meta 'all'
 all: $(TARGET)
 
-# Regra para criar o programa executável (o TARGET)
-# Esta é a linha que corrige o seu erro!
-# Ela junta main_fs.o E filesystem.o para criar o "fs"
+# Como gerar o executável a partir dos objetos
+# Junta todos os .o em um único binário chamado $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
 
-# Regra genérica para criar arquivos .o a partir de arquivos .c
+# Regra genérica: como compilar cada .c em .o
+# $< é o nome do arquivo-fonte, $@ é o alvo (.o)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Regra para limpar os arquivos gerados (executável e objetos)
-# Muito útil! Se algo der errado, você digita "make clean" e começa de novo.
+# Limpar tudo: remove executável e objetos
 clean:
 	rm -f $(TARGET) $(OBJECTS)
 
+# As metas que não são arquivos
 .PHONY: all clean

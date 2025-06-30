@@ -64,9 +64,9 @@ TreeNode* btree_search(BTree* tree, const char* name);
 void btree_traverse(BTreeNode* node, bool long_format); 
 
 // --- Funções de Arquivos e Diretórios ---
-TreeNode* create_file(const char* name, const char* content);
+TreeNode* delete_txt_file(const char* name, const char* content);
 TreeNode* create_directory(const char* name, Directory* parent);
-void delete_file(TreeNode* node); 
+void delete_txt_file(TreeNode* node); 
 void delete_directory_recursive(Directory* dir);
 void free_tree_node(TreeNode* node); 
 

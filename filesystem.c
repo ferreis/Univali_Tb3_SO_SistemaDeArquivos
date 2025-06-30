@@ -20,12 +20,12 @@ static TreeNode *btree_get_successor(BTreeNode *node, int idx);
 
 
 /* ============================================================================= */
-/* --- FUNÇÕES PRINCIPAIS
+/* --- FUNÇÕES PRINCIPAIS --- */
 /* ============================================================================= */
 
 // --- Funções de Arquivos e Diretórios ---
 
-TreeNode *create_file(const char *name, const char *content)
+TreeNode *create_txt_file(const char *name, const char *content)
 {
     TreeNode *node = (TreeNode *)malloc(sizeof(TreeNode)); 
     node->name = strdup(name);
@@ -59,7 +59,7 @@ TreeNode *create_directory(const char *name, Directory *parent)
     return node;
 }
 
-void delete_file(TreeNode *node)
+void delete_txt_file(TreeNode *node)
 {
     if (node && node->type == FILE_TYPE)
     {
@@ -89,7 +89,7 @@ void free_tree_node(TreeNode *node)
     {
         if (node->type == FILE_TYPE)
         {
-            delete_file(node);
+            delete_txt_file(node);
         }
         else if (node->type == DIRECTORY_TYPE)
         {
