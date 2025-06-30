@@ -10,7 +10,7 @@
 # Ignora os arquivos que o compilador cria
 *.o
 *.exe
-my_fs
+fs
 
 # Arquivos de saída do programa
 # Ignora a imagem do sistema de arquivos que seu programa gera
